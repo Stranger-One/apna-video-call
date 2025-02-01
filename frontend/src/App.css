@@ -1,0 +1,74 @@
+.landingContainer{
+    width: 100vw;
+    height: 100vh;
+    background: url("/public/background.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
+}
+.landingContainer nav{
+    padding-inline: 1.2rem;
+    padding-block: 1.6rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+.landingContainer nav h2{
+    font-size: 1.8rem;
+    font-weight: 500;
+}
+.landingContainer nav .navlist{
+    display: flex;
+    gap: 1.6rem;
+    cursor: pointer;
+
+}
+
+.landingMainContainer{
+    display: flex;
+    justify-content: space-between;
+    padding-inline: 4rem;
+    height: 80vh;
+    align-items: center;
+
+}
+.landingMainContainer div:nth-child(1){
+    font-size: 2.2rem;
+   
+}
+.getStartedButton{
+    background:#D97500 ;
+    width: fit-content;
+    padding: 0.7rem 3rem;
+    border-radius: 2rem;
+    margin-top: 1.4rem;
+    text-align: center;
+
+}
+.getStartedButton a{
+    text-decoration: none;
+    color: white;
+    font-size: 1.7rem;
+}
+
+
+.landingMainContainer > div:nth-child(2) img {
+    height: 70vh;
+    width: auto;
+
+}
+
+.navbar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: 20px;
+    text-align: center;
+}
+.meetContainer{
+    margin-top: 4rem;
+    display: flex;
+    /* align-items: center; */
+    justify-content: space-evenly;
+}
