@@ -52,7 +52,7 @@ export default function History() {
           routeTo("/home");
         }}
       >
-        <HomeIcon />
+        <HomeIcon style={{fontSize: "36px"}} />
       </IconButton>
       {meetings.length !== 0 ? (
         Array.isArray(meetings) &&
@@ -60,14 +60,14 @@ export default function History() {
           <Card key={i} variant="outlined">
             <CardContent>
               <Typography
-                sx={{ fontSize: 14 }}
+                sx={{ fontSize: 18 }}
                 color="text.secondary"
                 gutterBottom
               >
                 Meeting Arranged by :<b> {e.user_id} </b>
               </Typography>
               <Typography
-                sx={{ fontSize: 14 }}
+                sx={{ fontSize: 18 }}
                 color="text.secondary"
                 gutterBottom
               >
