@@ -214,6 +214,13 @@
   font-size: 2rem;
 }
 
+.peer_name{
+  font-size: 1rem;
+  text-align: center;
+  color: white;
+
+}
+
 /* Extra small devices (phones, up to 576px) */
 @media (max-width: 576px) {
   /* CSS styles */

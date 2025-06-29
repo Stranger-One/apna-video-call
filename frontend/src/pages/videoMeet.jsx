@@ -12,6 +12,7 @@ import StopScreenShareIcon from "@mui/icons-material/StopScreenShare";
 import ChatIcon from "@mui/icons-material/Chat";
 import { useParams } from "react-router-dom";
 import { useMemo } from "react";
+import VideoStream from "../components/VideoStream";
 
 const server_url = "http://localhost:8000";
 var connections = {};
@@ -538,17 +539,11 @@ export default function VideoMeetComponent() {
               ></video>
 
               {videos.map((video) => (
-                <div key={video.socketId} className="peers_video_container">
-                  <video
-                    data-socket={video.socketId}
-                    ref={(ref) => {
-                      if (ref && video.stream) {
-                        ref.srcObject = video.stream;
-                      }
-                    }}
-                    autoPlay
-                  ></video>
-                </div>
+                <VideoStream
+                  key={video.socketId}
+                  stream={video.stream}
+                  socketId={video.socketId}
+                />
               ))}
             </div>
 
