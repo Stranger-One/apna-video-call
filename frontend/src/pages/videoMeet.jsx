@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import { Badge, IconButton, TextField } from "@mui/material";
 import { Button } from "@mui/material";
@@ -7,14 +7,13 @@ import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import CallEndIcon from "@mui/icons-material/CallEnd";
 import MicIcon from "@mui/icons-material/Mic";
 import MicOffIcon from "@mui/icons-material/MicOff";
-import ScreenShareIcon from "@mui/icons-material/ScreenShare";
 import StopScreenShareIcon from "@mui/icons-material/StopScreenShare";
+import ScreenShareIcon from "@mui/icons-material/ScreenShare";
+import VideoStream from "../components/VideoStream";
 import ChatIcon from "@mui/icons-material/Chat";
 import { useParams } from "react-router-dom";
-import { useMemo } from "react";
-import VideoStream from "../components/VideoStream";
 
-const server_url = "http://localhost:8000";
+const server_url = process.env.REACT_APP_BACKEND_URL;
 var connections = {};
 
 const peerConfigConnections = {
@@ -30,18 +29,16 @@ export default function VideoMeetComponent() {
   let [audioAvailable, setAudioAvailable] = useState(false); // Is audio permission available
   let [video, setVideo] = useState(videoAvailable); // toggle video on/off
   let [audio, setAudio] = useState(audioAvailable); // toggle audio on/off
-
-  let [screen, setScreen] = useState(false); //hamara screen share on/off
-  let [showModal, setModal] = useState(false); //model show karega ki nhi jab koi call karega
-  let [screenAvailable, setScreenAvailable] = useState(); //screen share permission wise or h/w wise available hein ki nhi
-  let [messages, setMessages] = useState([]); //chat messages
-  let [message, setMessage] = useState(""); //chat message hum jo likhenge
-  let [newMessages, setNewMessages] = useState(0); //new messages count
-  let [askForUsername, setAskForUsername] = useState(true); //username puchega ki nhi jab bhi koi join as a gest karega
-  let [username, setUsername] = useState(""); //username
-  const videoRef = useRef([]);
-  let [videos, setVideos] = useState([]); //other users videos
-
+  let [screen, setScreen] = useState(false); 
+  let [showModal, setShowModal] = useState(false); 
+  let [screenAvailable, setScreenAvailable] = useState(); 
+  let [messages, setMessages] = useState([]); 
+  let [message, setMessage] = useState(""); 
+  let [newMessages, setNewMessages] = useState(0); 
+  let [askForUsername, setAskForUsername] = useState(true); 
+  let [username, setUsername] = useState(""); 
+  let [videos, setVideos] = useState([]); 
+  let videoRef = useRef([]);
   const { roomId } = useParams();
 
   const getPermissions = async () => {
@@ -326,25 +323,6 @@ export default function VideoMeetComponent() {
     }
   };
 
-  let silence = () => {
-    let ctx = new AudioContext();
-    let oscillator = ctx.createOscillator();
-    let dst = oscillator.connect(ctx.createMediaStreamDestination());
-    oscillator.start();
-    ctx.resume();
-    return Object.assign(dst.stream.getAudioTracks()[0], { enabled: false });
-  };
-
-  let black = ({ width = 640, height = 480 } = {}) => {
-    let canvas = Object.assign(document.createElement("canvas"), {
-      width,
-      height,
-    });
-    canvas.getContext("2d").fillRect(0, 0, width, height);
-    let stream = canvas.captureStream();
-    return Object.assign(stream.getVideoTracks()[0], { enabled: false });
-  };
-
   // Custom function to handle screen sharing
   let getDisplayMediaSuccess = (stream) => {
     try {
@@ -457,14 +435,24 @@ export default function VideoMeetComponent() {
   };
 
   const addMessage = (data, sender, socketIdSender) => {
+    console.log("Received message:", data, "from:", sender, "socketIdSender:", socketIdSender);
     setMessages((prevMessages) => [
       ...prevMessages,
       { sender: sender, data: data },
     ]);
-    if (socketIdSender !== socketId.current) {
-      setNewMessages((prevNewMessages) => prevNewMessages + 1);
+    console.log();
+    
+    
+    if(showModal){
+      setNewMessages(0);
+    } else {
+      setNewMessages((prevCount) => prevCount + 1);
     }
   };
+
+  useEffect(() => {
+    console.log("Is chat modal open?", showModal);
+  }, [showModal]);
 
   let sendMessage = () => {
     // console.log(socket.current);
@@ -487,6 +475,7 @@ export default function VideoMeetComponent() {
     setAudio(audioAvailable);
     connectToSocketServer();
   };
+  
 
   return (
     <div className="username_lobby">
@@ -611,7 +600,10 @@ export default function VideoMeetComponent() {
 
             <Badge badgeContent={newMessages} max={999} color="secondary">
               <IconButton
-                onClick={() => setModal(!showModal)}
+                onClick={() => {
+                  setShowModal(!showModal)
+                  setNewMessages(0); // Reset new messages count when chat is opened
+                }}
                 style={{ color: "white" }}
               >
                 <ChatIcon />{" "}
