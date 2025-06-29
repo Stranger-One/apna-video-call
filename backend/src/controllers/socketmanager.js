@@ -1,22 +1,24 @@
 import { Server } from "socket.io"; // Importing the Socket.IO server
-let connections = {}
-let messages = {}
-let timeOnline = {}
+let connections = {};
+let messages = {};
+let timeOnline = {};
 
 export const connectToSocket = (server) => {
-  const io = new Server(server,{
-    cors:{
+  const io = new Server(server, {
+    cors: {
       origin: "*",
-      methods: ["GET","POST"],
-      allowedHeaders:["*"],
-      credentials:true
-    }
+      methods: ["GET", "POST"],
+      allowedHeaders: ["*"],
+      credentials: true,
+    },
   });
 
   io.on("connection", (socket) => {
-    console.log("something connected");
-    
+    console.log("somethone connected :", socket.id);
+
     socket.on("join-call", (path) => {
+      console.log("join-call", path, socket.id);
+
       if (connections[path] === undefined) {
         connections[path] = [];
       }
@@ -45,6 +47,8 @@ export const connectToSocket = (server) => {
     });
 
     socket.on("signal", (toId, message) => {
+      console.log("signal", toId, message);
+      
       io.to(toId).emit("signal", socket.id, message);
     });
 
@@ -79,8 +83,6 @@ export const connectToSocket = (server) => {
     });
 
     socket.on("disconnect", () => {
-      var diffTime = Math.abs(timeOnline[socket.id] - new Date());
-
       for (const [k, v] of JSON.parse(
         JSON.stringify(Object.entries(connections))
       )) {
