@@ -32,8 +32,8 @@ export default function VideoMeetComponent() {
   let [screen, setScreen] = useState(false); 
   let [showModal, setShowModal] = useState(false); 
   let [screenAvailable, setScreenAvailable] = useState(); 
-  let [messages, setMessages] = useState([]); 
   let [message, setMessage] = useState(""); 
+  let [messages, setMessages] = useState([]); 
   let [newMessages, setNewMessages] = useState(0); 
   let [askForUsername, setAskForUsername] = useState(true); 
   let [username, setUsername] = useState(""); 
@@ -450,9 +450,6 @@ export default function VideoMeetComponent() {
     }
   };
 
-  useEffect(() => {
-    console.log("Is chat modal open?", showModal);
-  }, [showModal]);
 
   let sendMessage = () => {
     // console.log(socket.current);
@@ -492,10 +489,10 @@ export default function VideoMeetComponent() {
             </div>
             <div className="">
               <IconButton onClick={toggleVideo} style={{ color: "black" }}>
-                {video === true ? <VideocamIcon /> : <VideocamOffIcon />}
+                {video === true ? <VideocamOffIcon /> : <VideocamIcon />}
               </IconButton>
               <IconButton onClick={toggleAudio} style={{ color: "black" }}>
-                {audio === true ? <MicIcon /> : <MicOffIcon />}
+                {audio === true ? <MicOffIcon /> : <MicIcon />}
               </IconButton>
             </div>
           </div>
